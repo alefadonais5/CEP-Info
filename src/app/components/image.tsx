@@ -1,7 +1,8 @@
+//Corrigir essa questão
 export function Imagem(){
     return(
         <div>
-            <img src="imagem.jpg" alt="Céu"/>
+            <img src={"imagem.jpg"} alt={"Céu"}/>
         </div>
     );
 }

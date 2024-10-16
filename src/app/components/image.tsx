@@ -5,7 +5,7 @@ export function Imagem() {
     <div>
       <Image 
         src="https://ibb.co/FqSY8rn" 
-        alt="Descrição da imagem real" 
+        alt="Imagem" 
         className="w-full h-auto rounded-lg shadow-md"/>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+import { getAdress } from "../../get-adress";
 import { Imagem } from "./components/image";
 import { ListItems } from "./components/listitems";
 import { MyButton } from "./components/my-button";
@@ -34,7 +36,16 @@ function Card({children}: CardProps) {
 }
 
 
+
 export default function Home() {
+  let adress = "teste";
+
+  async function HandleGetAddress(){
+    const result = await getAdress("55825000");
+    adress = result;
+    console.log(result);
+
+  }
   return (
     <div>
       <h1>Página Home</h1>
@@ -47,6 +58,10 @@ export default function Home() {
         <span>Teste</span>
         <span>Teste</span>
       </Card>
+
+      <button onClick={HandleGetAddress} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button>
+      <span>Endereço: {adress}</span>
+      {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
     </div>
   );
 }

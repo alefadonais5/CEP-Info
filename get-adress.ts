@@ -1,5 +1,5 @@
-async function getAdress(cep: string){
-    console.log(cep);
+export async function getAdress(cep: string){
+    // console.log(cep);
 
     const url = `https://viacep.com.br/ws/${cep}/json/`
 
@@ -10,7 +10,8 @@ async function getAdress(cep: string){
         //console.log(response);
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
+        return data;
     } catch (error) {
         console.error("Ocorreu um erro inesperado.")
     }
@@ -18,6 +19,3 @@ async function getAdress(cep: string){
     
 
 }
-
-getAdress("55825000");
-console.log("Restante do código...")

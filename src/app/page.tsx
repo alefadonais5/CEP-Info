@@ -1,11 +1,7 @@
 "use client";
 import { getAdress } from "../../get-adress";
-import { Imagem } from "./components/image";
-import { ListItems } from "./components/listitems";
-import { MyButton } from "./components/my-button";
-import { Paragraph } from "./components/paragraph";
-import { Square } from "./components/square";
-import { Title } from "./components/title";
+import { useState } from "react";
+
 
 type AvatarPropos = {
   size: number;
@@ -38,13 +34,25 @@ function Card({children}: CardProps) {
 
 
 export default function Home() {
-  let adress = "teste";
+  const [adress, setAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // let adress = "Rua teste";
 
   async function HandleGetAddress(){
-    const result = await getAdress("55825000");
-    adress = result;
-    console.log(result);
+    setLoading(true);
+    try {
+      const result = await getAdress("52051000");
+      setAddress(result.logradouro);
+      // adress = result;
 
+      console.log(result.logradouro);
+    } catch (error){
+      console.log
+
+    }finally {
+      setLoading(false);
+    }
   }
   return (
     <div>
@@ -58,10 +66,14 @@ export default function Home() {
         <span>Teste</span>
         <span>Teste</span>
       </Card>
-
-      <button onClick={HandleGetAddress} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button>
-      <span>Endereço: {adress}</span>
-      {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
+      <div className="flex flex-col gap-2">
+        {String(loading)}
+        <span>Endereço: {adress}</span>
+        <button onClick={HandleGetAddress} className={`${loading && 'opacity-30'} w-fit px-3 py-2 rounded-lg bg-primary text-white`}>
+          {loading ? "Carregando..." : "Obter endereço"}        
+        </button>
+        {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
+      </div>
     </div>
   );
 }

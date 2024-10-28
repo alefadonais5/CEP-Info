@@ -1,7 +1,126 @@
 "use client";
 import { getAdress } from "../../get-adress";
 import { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
+interface Address {
+  id: String,
+  bairro: String,
+  cep: Number,
+  complemento: String,
+  ddd: Number,
+  logradouro: String,
+  estado: String,
+  uf: String,
+  gia: String,
+  ibge: String,
+  localidade: String,
+  siafi: Number,
+  regiao: String
+  unidade: String,
+};
+
+const addresses: Address [] = [];
+
+addresses.push({
+  id: uuidv4(),
+  bairro: "Centro",
+  cep: 111223345,
+  complemento: "Apto 101",
+  ddd: 11,
+  logradouro: "Rua Exemplo",
+  estado: "São Paulo",
+  uf: "SP",
+  gia: "1234",
+  ibge: "1234567",
+  localidade: "São Paulo",
+  siafi: 1234,
+  regiao: "Sudeste",
+  unidade: "SP"
+});
+
+addresses.push({
+  id: uuidv4(),
+  bairro: "Copacabana",
+  cep: 22070001,
+  complemento: "Prédio Azul",
+  ddd: 21,
+  logradouro: "Avenida Atlântica",
+  estado: "Rio de Janeiro",
+  uf: "RJ",
+  gia: "5678",
+  ibge: "1234568",
+  localidade: "Rio de Janeiro",
+  siafi: 5678,
+  regiao: "Sudeste",
+  unidade: "RJ"
+});
+
+addresses.push({
+  id: uuidv4(),
+  bairro: "Savassi",
+  cep: 30150001,
+  complemento: "Casa 2",
+  ddd: 31,
+  logradouro: "Rua Pernambuco",
+  estado: "Minas Gerais",
+  uf: "MG",
+  gia: "9101",
+  ibge: "1234569",
+  localidade: "Belo Horizonte",
+  siafi: 9101,
+  regiao: "Sudeste",
+  unidade: "MG"
+});
+
+addresses.push({
+  id: uuidv4(),
+  bairro: "Jardim Paulista",
+  cep: 1267895,
+  complemento: "",
+  ddd: 11,
+  logradouro: "Rua Haddock Lobo",
+  estado: "São Paulo",
+  uf: "SP",
+  gia: "1121",
+  ibge: "1234570",
+  localidade: "São Paulo",
+  siafi: 1121,
+  regiao: "Sudeste",
+  unidade: "SP"
+});
+
+addresses.push({
+  id: uuidv4(),
+  bairro: "Vila Mariana",
+  cep: 2398753,
+  complemento: "Apto 502",
+  ddd: 11,
+  logradouro: "Rua Domingos de Moraes",
+  estado: "São Paulo",
+  uf: "SP",
+  gia: "3141",
+  ibge: "1234571",
+  localidade: "São Paulo",
+  siafi: 3141,
+  regiao: "Sudeste",
+  unidade: "SP"
+});
+
+
+
+const nomes: string[] = [
+  "Augusto César",
+  "Douglas Henrique",
+  "Leandro Carvalho",
+  "Claudio José",
+  "Davi Araújo",
+  "Augusto César",
+  "Douglas Henrique",
+  "Leandro Carvalho",
+  "Claudio José",
+  "Davi Araújo",
+];
 
 type AvatarPropos = {
   size: number;
@@ -46,7 +165,7 @@ export default function Home() {
       setAddress(result.logradouro);
       // adress = result;
 
-      console.log(result.logradouro);
+      console.log(result);
     } catch (error){
       console.log
 
@@ -74,6 +193,24 @@ export default function Home() {
         </button>
         {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
       </div>
+
+        <ul>
+          {/* {nomes.map((nome) => {
+             return <li>{nome}</li>
+          })}; */}
+
+          {nomes.map((nome, index) => (
+             <li key= {index} >{nome}</li>
+          ))}
+
+        </ul>
+
+        <ul>
+          {addresses.map((adress, id) =>(
+            <li key={id}>{adress.logradouro}</li>
+          ))}
+        </ul>
+      
     </div>
   );
 }

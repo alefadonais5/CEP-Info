@@ -129,7 +129,7 @@ type AvatarPropos = {
 // function Avatar(props: AvatarPropos) {
 //   const {name, size} = props;
 function Avatar({size}: AvatarPropos) { //Propriedade pode ter uma valor padrão "size=100"
-  console.log(size);
+  // console.log(size);
   return (
     <img
       className="avatar"
@@ -146,7 +146,7 @@ type CardProps = {
 }
 
 function Card({children}: CardProps) {
-  console.log(children);
+  // console.log(children);
   return <div className="p-3 border border-black rounded-lg">{children}</div>
 }
 
@@ -156,12 +156,16 @@ export default function Home() {
   const [adress, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [textValue, setTextValue] = useState("");
+
   // let adress = "Rua teste";
 
   async function HandleGetAddress(){
+
     setLoading(true);
+
     try {
-      const result = await getAdress("52051000");
+      const result = await getAdress(textValue);
       setAddress(result.logradouro);
       // adress = result;
 
@@ -173,6 +177,8 @@ export default function Home() {
       setLoading(false);
     }
   }
+
+
   return (
     <div>
       <h1>Página Home</h1>
@@ -188,7 +194,12 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         {String(loading)}
         <span>Endereço: {adress}</span>
-        <button onClick={HandleGetAddress} className={`${loading && 'opacity-30'} w-fit px-3 py-2 rounded-lg bg-primary text-white`}>
+        <input 
+        onChange={(e) => setTextValue(e.target.value)}
+        className="rounded-lg shadow-lg" 
+        placeholder="Digite um CEP válido">
+        </input>
+        <button disabled={textValue ===""} onClick={HandleGetAddress} className={`${loading && 'opacity-30'} w-fit px-3 py-2 rounded-lg bg-primary text-white`}>
           {loading ? "Carregando..." : "Obter endereço"}        
         </button>
         {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
@@ -206,8 +217,8 @@ export default function Home() {
         </ul>
 
         <ul>
-          {addresses.map((adress, id) =>(
-            <li key={id}>{adress.logradouro}</li>
+          {addresses.map((adress) =>(
+            <li key={adress.id}>{adress.logradouro}</li>
           ))}
         </ul>
       

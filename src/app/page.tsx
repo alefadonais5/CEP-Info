@@ -13,7 +13,7 @@ type Address = {
   uf: string;
 };;
 
-const addresses: Address [] = [
+const initialAddresses: Address [] = [
   {
     id: "1",
     bairro: "Centro",
@@ -100,8 +100,11 @@ function Card({children}: CardProps) {
 
 
 export default function Home() {
-  const [adress, setAddresses] = useState<Address[]>();
+  const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const[addresses, setAddresses] = useState<Address[]>(initialAddresses) //como defino um tipo para um estado
+
 
   const [textValue, setTextValue] = useState("");
 
@@ -117,22 +120,11 @@ export default function Home() {
         alert("CEP inválido.");
         return;
       }
-  
-      const newAddress: Address = {
-        id: String(Date.now()),
-        bairro: result.bairro,
-        cep: result.cep,
-        complemento: result.complemento || "",
-        ddd: result.ddd,
-        localidade: result.localidade,
-        logradouro: result.logradouro,
-        uf: result.uf,
-      };
-  
-      // Criando uma cópia do array addresses e adicionando o novo endereço
-      const updatedAddresses = [...addresses];
-      updatedAddresses.unshift(newAddress); // Adiciona o novo endereço ao início da lista
-      setAddresses(updatedAddresses); // Corrigido para setAddresses
+      
+      //Adiciona o novo endereço na primeira posição do array
+      const newAddresses = [ ...initialAddresses, result]
+      setAddresses(newAddresses)
+
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");

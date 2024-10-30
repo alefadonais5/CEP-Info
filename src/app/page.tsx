@@ -155,7 +155,7 @@ export default function Home() {
       </Card>
       <div className="flex flex-col gap-2">
         {String(loading)}
-        <span>Endereço: {adress}</span>
+        <span>Endereço: {}</span>
         <input 
         onChange={(e) => setTextValue(e.target.value)}
         className="rounded-lg shadow-lg" 

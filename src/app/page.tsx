@@ -122,7 +122,7 @@ export default function Home() {
       }
       
       //Adiciona o novo endereço na primeira posição do array
-      const newAddresses = [ ...initialAddresses, result]
+      const newAddresses = [result, ...initialAddresses]
       setAddresses(newAddresses)
 
     } catch (error) {

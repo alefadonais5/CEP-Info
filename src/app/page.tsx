@@ -1,6 +1,8 @@
 "use client";
+import { formatDistanceToNow } from "date-fns";
 import { getAdress } from "../../get-adress";
 import { useState } from "react";
+import { ptBR } from "date-fns/locale";
 
 type Address = {
   id: string;
@@ -11,6 +13,7 @@ type Address = {
   localidade: string; // Cidade
   logradouro: string;
   uf: string;
+  consultedAt: Date;
 };;
 
 const initialAddresses: Address [] = [
@@ -23,6 +26,7 @@ const initialAddresses: Address [] = [
     localidade: "São Paulo",
     logradouro: "Praça da Sé",
     uf: "SP",
+    consultedAt: new Date(),
   },
   {
     id: "2",
@@ -33,6 +37,7 @@ const initialAddresses: Address [] = [
     localidade: "Rio de Janeiro",
     logradouro: "Avenida Atlântica",
     uf: "RJ",
+    consultedAt: new Date(),
   },
   {
     id: "3",
@@ -43,6 +48,7 @@ const initialAddresses: Address [] = [
     localidade: "Belo Horizonte",
     logradouro: "Rua Pernambuco",
     uf: "MG",
+    consultedAt: new Date()
   },
   {
     id: "4",
@@ -53,6 +59,7 @@ const initialAddresses: Address [] = [
     localidade: "Fortaleza",
     logradouro: "Rua Silva Jatahy",
     uf: "CE",
+    consultedAt: new Date(),
   },
 ];
 
@@ -96,7 +103,13 @@ function Card({children}: CardProps) {
   // console.log(children);
   return <div className="p-3 border border-black rounded-lg">{children}</div>
 }
-
+function formatDate(date: Date){
+  const result = formatDistanceToNow(
+    new Date(date),
+    {includeSeconds: true, locale: ptBR}
+  )
+  return result
+}
 
 
 export default function Home() {
@@ -121,8 +134,12 @@ export default function Home() {
         return;
       }
       
+      const newAdress: Address = {id: self.crypto.randomUUID(), consultedAt: new Date(), ...result};
+      console.log(newAdress)
+
       //Adiciona o novo endereço na primeira posição do array
-      const newAddresses = [result, ...initialAddresses]
+      // const newAddresses = [result, ...initialAddresses]
+      const newAddresses = [newAdress, ...initialAddresses]
       setAddresses(newAddresses)
 
     } catch (error) {
@@ -172,7 +189,7 @@ export default function Home() {
 
         <ul>
           {addresses.map((adress) =>(
-            <li key={adress.id}>{adress.localidade}</li>
+            <li key={adress.id}>{adress.localidade}, {formatDate(adress.consultedAt)}</li>
           ))}
         </ul>
       

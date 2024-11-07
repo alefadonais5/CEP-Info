@@ -1,7 +1,7 @@
 "use client";
-import { formatDistanceToNow } from "date-fns";
-import { getAdress } from "../../get-adress";
 import { useState } from "react";
+import { getAdress } from "../../get-adress";
+import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 type Address = {
@@ -14,9 +14,9 @@ type Address = {
   logradouro: string;
   uf: string;
   consultedAt: Date;
-};;
+};
 
-const initialAddresses: Address [] = [
+const initialAddresses: Address[] = [
   {
     id: "1",
     bairro: "Centro",
@@ -48,7 +48,7 @@ const initialAddresses: Address [] = [
     localidade: "Belo Horizonte",
     logradouro: "Rua Pernambuco",
     uf: "MG",
-    consultedAt: new Date()
+    consultedAt: new Date(),
   },
   {
     id: "4",
@@ -63,85 +63,44 @@ const initialAddresses: Address [] = [
   },
 ];
 
-// const nomes: string[] = [
-//   "Augusto César",
-//   "Douglas Henrique",
-//   "Leandro Carvalho",
-//   "Claudio José",
-//   "Davi Araújo",
-//   "Augusto César",
-//   "Douglas Henrique",
-//   "Leandro Carvalho",
-//   "Claudio José",
-//   "Davi Araújo",
-// ];
-
-type AvatarPropos = {
-  size: number;
-  // name?: string; //parâmetros opcional "?"
+function formatDate(date: Date) {
+  const result = formatDistanceToNow(new Date(date), {
+    includeSeconds: true,
+    locale: ptBR,
+  });
+  return result;
 }
-// function Avatar(props: AvatarPropos) {
-//   const {name, size} = props;
-function Avatar({size}: AvatarPropos) { //Propriedade pode ter uma valor padrão "size=100"
-  // console.log(size);
-  return (
-    <img
-      className="avatar"
-      src="https://i.imgur.com/1bX5QH6.jpg"
-      alt="Lin Lanying"
-      width={size}
-      height={size}
-    />
-  );
-}
-
-type CardProps = {
-  children: React.ReactNode;
-}
-
-function Card({children}: CardProps) {
-  // console.log(children);
-  return <div className="p-3 border border-black rounded-lg">{children}</div>
-}
-function formatDate(date: Date){
-  const result = formatDistanceToNow(
-    new Date(date),
-    {includeSeconds: true, locale: ptBR}
-  )
-  return result
-}
-
 
 export default function Home() {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const[addresses, setAddresses] = useState<Address[]>(initialAddresses) //como defino um tipo para um estado
-
+  const [addresses, setAddresses] = useState<Address[]>(initialAddresses); //como defino um tipo para um estado
 
   const [textValue, setTextValue] = useState("");
 
-  // let adress = "Rua teste";
-
   async function HandleGetAddress() {
     setLoading(true);
-  
+
     try {
       const result = await getAdress(textValue);
-  
+      console.log(result);
       if (result?.erro === "true") {
         alert("CEP inválido.");
         return;
       }
-      
-      const newAdress: Address = {id: self.crypto.randomUUID(), consultedAt: new Date(), ...result};
-      console.log(newAdress)
+
+      const newAdress: Address = {
+        id: self.crypto.randomUUID(),
+        consultedAt: new Date(),
+        ...result,
+      };
+      console.log(newAdress);
 
       //Adiciona o novo endereço na primeira posição do array
       // const newAddresses = [result, ...initialAddresses]
-      const newAddresses = [newAdress, ...initialAddresses]
-      setAddresses(newAddresses)
-
+      const newAddresses = [newAdress, ...addresses];
+      setAddresses(newAddresses);
     } catch (error) {
       console.log(error);
       alert("Ocorreu um erro ao obter o endereço.");
@@ -151,48 +110,37 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className="">
       <h1>Página Home</h1>
-      <Card>
-        <Avatar size={50}/>
-      </Card>
-      
 
-      <Card>
-        <span>Teste</span>
-        <span>Teste</span>
-      </Card>
       <div className="flex flex-col gap-2">
         {String(loading)}
-        <span>Endereço: {}</span>
-        <input 
-        onChange={(e) => setTextValue(e.target.value)}
-        className="rounded-lg shadow-lg" 
-        placeholder="Digite um CEP válido">
-        </input>
-        <button disabled={textValue ===""} onClick={HandleGetAddress} className={`${loading && 'opacity-30'} w-fit px-3 py-2 rounded-lg bg-primary text-white`}>
-          {loading ? "Carregando..." : "Obter endereço"}        
+        <label>CEP</label>
+        <input
+          onChange={(e) => setTextValue(e.target.value)}
+          className="rounded-lg shadow-lg"
+          placeholder="Digite um CEP válido"
+        />
+
+        <button
+          onClick={HandleGetAddress}
+          disabled={textValue === ""}
+          className={`${
+            loading && "opacity-30"
+          } w-fit px-3 py-2 rounded-lg bg-primary text-white`}
+        >
+          {loading ? "Carregando..." : "Obter endereço"}
         </button>
         {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
       </div>
 
-        <ul>
-          {/* {nomes.map((nome) => {
-             return <li>{nome}</li>
-          })}; */}
-
-          {/* {nomes.map((nome, index) => (
-             <li key= {index} >{nome}</li>
-          ))} */}
-
-        </ul>
-
-        <ul>
-          {addresses.map((adress) =>(
-            <li key={adress.id}>{adress.localidade}, {formatDate(adress.consultedAt)}</li>
-          ))}
-        </ul>
-      
+      <ul>
+        {addresses.map((address) => (
+          <li key={address.id}>
+            {address.logradouro}, {formatDate(address.consultedAt)}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

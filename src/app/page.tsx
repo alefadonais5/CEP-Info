@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getAdress } from "../../get-adress";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { MdOutlineDelete } from "react-icons/md";
 
 type Address = {
   id: string;
@@ -110,7 +111,7 @@ export default function Home() {
   }
 
   return (
-    <div className="">
+    <div className=" flex flex-col items-center">
       <h1>Página Home</h1>
 
       <div className="flex flex-col gap-2">
@@ -118,7 +119,7 @@ export default function Home() {
         <label>CEP</label>
         <input
           onChange={(e) => setTextValue(e.target.value)}
-          className="rounded-lg shadow-lg"
+          className="rounded-lg shadow-lg px-4 p-3"
           placeholder="Digite um CEP válido"
         />
 
@@ -127,20 +128,40 @@ export default function Home() {
           disabled={textValue === ""}
           className={`${
             loading && "opacity-30"
-          } w-fit px-3 py-2 rounded-lg bg-primary text-white`}
+          } w-fit px-3 py-2  bg-blue-700 text-white rounded-lg`}
         >
           {loading ? "Carregando..." : "Obter endereço"}
         </button>
         {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
       </div>
-
-      <ul>
+      <table className="table-auto [&>*>*>*]:border-2">
+        <thead>
+          <tr className="auto [&>*]:px-4 [&>*]:py-2">
+            <th>Logradouro</th>
+            <th>Bairro</th>
+            <th>Localidade</th>
+            <th>UF</th>
+            <th>CEP</th>
+            <th>Consultado em</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
         {addresses.map((address) => (
-          <li key={address.id}>
-            {address.logradouro}, {formatDate(address.consultedAt)}
-          </li>
+          <tr key={address.id} className="[&>*]:px-4 [&>*]:py-2">
+            <td>{address.logradouro}</td>
+            <td>{address.bairro}</td>
+            <td>{address.localidade}</td>
+            <td>{address.uf}</td>
+            <td>{address.cep}</td>
+            <td>{formatDate(address.consultedAt)}</td>
+            <td>
+              <button className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
+            </td>
+          </tr>
         ))}
-      </ul>
+        </tbody>
+      </table>
     </div>
   );
 }

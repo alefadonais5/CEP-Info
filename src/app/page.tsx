@@ -134,7 +134,7 @@ export default function Home() {
             disabled={textValue === ""}
             className={`${
               loading && "opacity-50"
-            } w-full px-4 py-2 bg-[#16DB93] text-[#F0F4EF] rounded-lg hover:bg-[#12A875] transition-all duration-200`}
+            } w-full cursor-pointer px-4 py-2 bg-[#16DB93] text-[#F0F4EF] rounded-lg hover:bg-[#12A875] transition-all duration-200`}
           >
             {loading ? "Carregando..." : "Obter endereço"}
           </button>

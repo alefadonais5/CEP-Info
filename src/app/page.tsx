@@ -19,7 +19,7 @@ type Address = {
 
 const initialAddresses: Address[] = [
   {
-    id: "1",
+    id: self.crypto.randomUUID(),
     bairro: "Centro",
     cep: "01001-000",
     complemento: "Apto 101",
@@ -30,7 +30,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "2",
+    id: self.crypto.randomUUID(),
     bairro: "Copacabana",
     cep: "22041-001",
     complemento: "Bloco B, Ap 502",
@@ -41,7 +41,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "3",
+    id: self.crypto.randomUUID(),
     bairro: "Savassi",
     cep: "30140-071",
     complemento: "Loja 3",
@@ -52,7 +52,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "4",
+    id: self.crypto.randomUUID(),
     bairro: "Meireles",
     cep: "60160-230",
     complemento: "Casa 10",
@@ -110,58 +110,70 @@ export default function Home() {
     }
   }
 
+  function handleDeleteAddress(id: string){
+    const filteredAddresses = addresses.filter((address) => address.id !== id);
+
+    setAddresses(filteredAddresses);
+  }
+
   return (
-    <div className=" flex flex-col items-center">
-      <h1>Página Home</h1>
+    <body className="bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] text-[#F0F4EF] min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-[#1B263B]">
+        <h1 className="text-2xl font-semibold mb-4">Consulta de Endereços</h1>
 
-      <div className="flex flex-col gap-2">
-        {String(loading)}
-        <label>CEP</label>
-        <input
-          onChange={(e) => setTextValue(e.target.value)}
-          className="rounded-lg shadow-lg px-4 p-3"
-          placeholder="Digite um CEP válido"
-        />
+        <div className="flex flex-col gap-4 w-full max-w-sm">
+          <label className="text-lg">CEP</label>
+          <input
+            onChange={(e) => setTextValue(e.target.value)}
+            className="rounded-lg shadow-lg px-4 p-3 bg-[#0D1B2A] text-[#F0F4EF] placeholder-[#F0F4EF]"
+            placeholder="Digite um CEP válido"
+          />
 
-        <button
-          onClick={HandleGetAddress}
-          disabled={textValue === ""}
-          className={`${
-            loading && "opacity-30"
-          } w-fit px-3 py-2  bg-blue-700 text-white rounded-lg`}
-        >
-          {loading ? "Carregando..." : "Obter endereço"}
-        </button>
-        {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
+          <button
+            onClick={HandleGetAddress}
+            disabled={textValue === ""}
+            className={`${
+              loading && "opacity-50"
+            } w-full px-4 py-2 bg-[#16DB93] text-[#F0F4EF] rounded-lg hover:bg-[#12A875] transition-all duration-200`}
+          >
+            {loading ? "Carregando..." : "Obter endereço"}
+          </button>
+        </div>
+
+        <table className="table-fixed mt-8 w-auto text-center bg-[#1B263B] text-[#F0F4EF] rounded-lg shadow-lg">
+          <thead>
+            <tr className="[&>*]:px-4 [&>*]:py-2 bg-[#0D1B2A]">
+              <th>Logradouro</th>
+              <th>Bairro</th>
+              <th>Localidade</th>
+              <th>UF</th>
+              <th>CEP</th>
+              <th>Consultado em</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {addresses.map((address) => (
+              <tr key={address.id} className="[&>*]:px-4 [&>*]:py-2">
+                <td>{address.logradouro}</td>
+                <td>{address.bairro}</td>
+                <td>{address.localidade}</td>
+                <td>{address.uf}</td>
+                <td>{address.cep}</td>
+                <td>{formatDate(address.consultedAt)}</td>
+                <td>
+                  <button
+                    onClick={() => handleDeleteAddress(address.id)}
+                    className="bg-red-500 p-1 rounded-full text-white hover:bg-red-700 transition-all duration-200"
+                  >
+                    <MdOutlineDelete size={18} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <table className="table-auto [&>*>*>*]:border-2">
-        <thead>
-          <tr className="auto [&>*]:px-4 [&>*]:py-2">
-            <th>Logradouro</th>
-            <th>Bairro</th>
-            <th>Localidade</th>
-            <th>UF</th>
-            <th>CEP</th>
-            <th>Consultado em</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-        {addresses.map((address) => (
-          <tr key={address.id} className="[&>*]:px-4 [&>*]:py-2">
-            <td>{address.logradouro}</td>
-            <td>{address.bairro}</td>
-            <td>{address.localidade}</td>
-            <td>{address.uf}</td>
-            <td>{address.cep}</td>
-            <td>{formatDate(address.consultedAt)}</td>
-            <td>
-              <button className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-    </div>
+    </body>
   );
 }

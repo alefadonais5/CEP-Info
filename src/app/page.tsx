@@ -1,5 +1,8 @@
+//alerta quando clicar para remover um item
+// fazer uma verificação caso coloque cep inválido
+
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAdress } from "../../get-adress";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -19,7 +22,7 @@ type Address = {
 
 const initialAddresses: Address[] = [
   {
-    id: "1",
+    id: self.crypto.randomUUID(),
     bairro: "Centro",
     cep: "01001-000",
     complemento: "Apto 101",
@@ -30,7 +33,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "2",
+    id: self.crypto.randomUUID(),
     bairro: "Copacabana",
     cep: "22041-001",
     complemento: "Bloco B, Ap 502",
@@ -41,7 +44,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "3",
+    id: self.crypto.randomUUID(),
     bairro: "Savassi",
     cep: "30140-071",
     complemento: "Loja 3",
@@ -52,7 +55,7 @@ const initialAddresses: Address[] = [
     consultedAt: new Date(),
   },
   {
-    id: "4",
+    id: self.crypto.randomUUID(),
     bairro: "Meireles",
     cep: "60160-230",
     complemento: "Casa 10",
@@ -73,34 +76,37 @@ function formatDate(date: Date) {
 }
 
 export default function Home() {
-  const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const [addresses, setAddresses] = useState<Address[]>(initialAddresses); //como defino um tipo para um estado
+  const [addresses, setAddresses] = useState<Address[] | null >(null); //como defino um tipo para um estado
 
   const [textValue, setTextValue] = useState("");
 
+  // async function handleGetAddress() {
+    
+  // }
+
+  
   async function HandleGetAddress() {
     setLoading(true);
-
+    
     try {
       const result = await getAdress(textValue);
-      console.log(result);
+      //console.log(result);
       if (result?.erro === "true") {
         alert("CEP inválido.");
         return;
       }
-
+      
       const newAdress: Address = {
         id: self.crypto.randomUUID(),
         consultedAt: new Date(),
         ...result,
       };
-      console.log(newAdress);
-
+      //console.log(newAdress);
+      
       //Adiciona o novo endereço na primeira posição do array
       // const newAddresses = [result, ...initialAddresses]
-      const newAddresses = [newAdress, ...addresses];
+      const newAddresses = [newAdress].concat(addresses ? addresses : []);
       setAddresses(newAddresses);
     } catch (error) {
       console.log(error);
@@ -109,6 +115,28 @@ export default function Home() {
       setLoading(false);
     }
   }
+  
+  function handleDeleteAddress(id:string){
+    if (!addresses) return;
+    const filtereAddresses = addresses.filter((address) => address.id !== id);
+    setAddresses(filtereAddresses)
+    console.log(filtereAddresses);
+  }
+
+  useEffect(() => {
+    const result = localStorage.getItem("@addresses");
+
+    if (result !== null){
+      setAddresses(JSON.parse(result));
+    }
+  }, []);
+
+  useEffect(() => {
+    if(addresses === null) return;
+
+    localStorage.setItem("@addresses", JSON.stringify(addresses));
+  }, [addresses]);
+
 
   return (
     <div className=" flex flex-col items-center">
@@ -147,7 +175,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-        {addresses.map((address) => (
+        {addresses?.map((address) => (
           <tr key={address.id} className="[&>*]:px-4 [&>*]:py-2">
             <td>{address.logradouro}</td>
             <td>{address.bairro}</td>
@@ -156,7 +184,7 @@ export default function Home() {
             <td>{address.cep}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
+              <button onClick={() => handleDeleteAddress(address.id)} className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}

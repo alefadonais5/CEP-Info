@@ -115,41 +115,19 @@ export default function Home() {
       setLoading(false);
     }
   }
-  
-  function handleDeleteAddress(id:string){
-    if (!addresses) return;
-    const filtereAddresses = addresses.filter((address) => address.id !== id);
-    setAddresses(filtereAddresses)
-    console.log(filtereAddresses);
-  }
-
-  useEffect(() => {
-    const result = localStorage.getItem("@addresses");
-
-    if (result !== null){
-      setAddresses(JSON.parse(result));
-    }
-  }, []);
-
-  useEffect(() => {
-    if(addresses === null) return;
-
-    localStorage.setItem("@addresses", JSON.stringify(addresses));
-  }, [addresses]);
-
 
   return (
-    <div className=" flex flex-col items-center">
-      <h1>Página Home</h1>
+    <body className="bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] text-[#F0F4EF] min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-[#1B263B]">
+        <h1 className="text-2xl font-semibold mb-4">Consulta de Endereços</h1>
 
-      <div className="flex flex-col gap-2">
-        {String(loading)}
-        <label>CEP</label>
-        <input
-          onChange={(e) => setTextValue(e.target.value)}
-          className="rounded-lg shadow-lg px-4 p-3"
-          placeholder="Digite um CEP válido"
-        />
+        <div className="flex flex-col gap-4 w-full max-w-sm">
+          <label className="text-lg">CEP</label>
+          <input
+            onChange={(e) => setTextValue(e.target.value)}
+            className="rounded-lg shadow-lg px-4 p-3 bg-[#0D1B2A] text-[#F0F4EF] placeholder-[#F0F4EF]"
+            placeholder="Digite um CEP válido"
+          />
 
         <button
           onClick={HandleGetAddress}
@@ -184,7 +162,7 @@ export default function Home() {
             <td>{address.cep}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button onClick={() => handleDeleteAddress(address.id)} className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
+              <button className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}

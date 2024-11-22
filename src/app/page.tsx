@@ -77,21 +77,17 @@ function formatDate(date: Date) {
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [addresses, setAddresses] = useState<Address[] | null >(null); //como defino um tipo para um estado
+  const [addresses, setAddresses] = useState<Address[] | null >(null); 
 
   const [textValue, setTextValue] = useState("");
 
-  // async function handleGetAddress() {
-    
-  // }
 
-  
   async function HandleGetAddress() {
     setLoading(true);
     
     try {
       const result = await getAdress(textValue);
-      //console.log(result);
+
       if (result?.erro === "true") {
         alert("CEP inválido.");
         return;
@@ -102,10 +98,7 @@ export default function Home() {
         consultedAt: new Date(),
         ...result,
       };
-      //console.log(newAdress);
-      
-      //Adiciona o novo endereço na primeira posição do array
-      // const newAddresses = [result, ...initialAddresses]
+
       const newAddresses = [newAdress].concat(addresses ? addresses : []);
       setAddresses(newAddresses);
     } catch (error) {
@@ -117,7 +110,7 @@ export default function Home() {
   }
 
   return (
-    <body className="bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] text-[#F0F4EF] min-h-screen flex items-center justify-center">
+    <div className="bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] text-[#F0F4EF] min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-[#1B263B]">
         <h1 className="text-2xl font-semibold mb-4">Consulta de Endereços</h1>
 
@@ -138,7 +131,7 @@ export default function Home() {
         >
           {loading ? "Carregando..." : "Obter endereço"}
         </button>
-        {/* <button onClick={() => getAdress("55825000")} className="px-3 py-2 rounded-lg bg-primary text-white">Obter endereço</button> */}
+        
       </div>
       <table className="table-auto [&>*>*>*]:border-2">
         <thead>
@@ -162,12 +155,13 @@ export default function Home() {
             <td>{address.cep}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button className="bg-red-300 p-0.5 flex items-center"><MdOutlineDelete size={24}/></button>
+              <button className="bg-red-600 p-0.5 flex justify-items-center"><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

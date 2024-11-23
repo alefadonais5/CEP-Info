@@ -1,5 +1,3 @@
-//alerta quando clicar para remover um item
-// fazer uma verificação caso coloque cep inválido
 
 "use client";
 import { useEffect, useState } from "react";
@@ -109,6 +107,20 @@ export default function Home() {
     }
   }
 
+  function handleRemoveAddress(id: string) {
+    const confirmRemoval = window.confirm("Tem certeza de que deseja remover este endereço?");
+    if (confirmRemoval) {
+      // Adiciona uma classe para animação de remoção
+      const row = document.getElementById(id);
+      if (row) {
+        row.classList.add("opacity-0", "translate-x-[-10px]");
+        setTimeout(() => {
+          setAddresses((prev) => prev?.filter((address) => address.id !== id) || null);
+        }, 300); // Aguarda o fim da animação
+      }
+    }
+  }
+
   return (
     <div className="bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] text-[#F0F4EF] min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-[#1B263B]">
@@ -148,14 +160,14 @@ export default function Home() {
         <tbody>
         {addresses?.map((address) => (
           <tr key={address.id} className="[&>*]:px-4 [&>*]:py-2">
-            <td>{address.logradouro}</td>
-            <td>{address.bairro}</td>
-            <td>{address.localidade}</td>
-            <td>{address.uf}</td>
-            <td>{address.cep}</td>
+            <td>{address.logradouro || "xxx"}</td>
+            <td>{address.bairro || "xxx"}</td>
+            <td>{address.localidade || "xxx"}</td>
+            <td>{address.uf || "xxx"}</td>
+            <td>{address.cep || "xxx"}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button className="bg-red-600 p-0.5 flex justify-items-center"><MdOutlineDelete size={24}/></button>
+              <button className="bg-red-600 p-0.5 flex justify-items-center" onClick={() => handleRemoveAddress}><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}

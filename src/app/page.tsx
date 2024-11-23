@@ -167,7 +167,7 @@ export default function Home() {
             <td>{address.cep || "xxx"}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button className="bg-red-600 p-0.5 flex justify-items-center" onClick={() => handleRemoveAddress}><MdOutlineDelete size={24}/></button>
+              <button className="bg-red-600 p-0.5 flex justify-items-center"><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}

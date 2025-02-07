@@ -1,6 +1,6 @@
 
 "use client";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { getAdress } from "../../get-adress";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -18,52 +18,6 @@ type Address = {
   consultedAt: Date;
 };
 
-const initialAddresses: Address[] = [
-  {
-    id: self.crypto.randomUUID(),
-    bairro: "Centro",
-    cep: "01001-000",
-    complemento: "Apto 101",
-    ddd: "11",
-    localidade: "São Paulo",
-    logradouro: "Praça da Sé",
-    uf: "SP",
-    consultedAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    bairro: "Copacabana",
-    cep: "22041-001",
-    complemento: "Bloco B, Ap 502",
-    ddd: "21",
-    localidade: "Rio de Janeiro",
-    logradouro: "Avenida Atlântica",
-    uf: "RJ",
-    consultedAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    bairro: "Savassi",
-    cep: "30140-071",
-    complemento: "Loja 3",
-    ddd: "31",
-    localidade: "Belo Horizonte",
-    logradouro: "Rua Pernambuco",
-    uf: "MG",
-    consultedAt: new Date(),
-  },
-  {
-    id: self.crypto.randomUUID(),
-    bairro: "Meireles",
-    cep: "60160-230",
-    complemento: "Casa 10",
-    ddd: "85",
-    localidade: "Fortaleza",
-    logradouro: "Rua Silva Jatahy",
-    uf: "CE",
-    consultedAt: new Date(),
-  },
-];
 
 function formatDate(date: Date) {
   const result = formatDistanceToNow(new Date(date), {
@@ -106,19 +60,14 @@ export default function Home() {
       setLoading(false);
     }
   }
-
   function handleRemoveAddress(id: string) {
-    const confirmRemoval = window.confirm("Tem certeza de que deseja remover este endereço?");
-    if (confirmRemoval) {
-      // Adiciona uma classe para animação de remoção
-      const row = document.getElementById(id);
-      if (row) {
-        row.classList.add("opacity-0", "translate-x-[-10px]");
-        setTimeout(() => {
-          setAddresses((prev) => prev?.filter((address) => address.id !== id) || null);
-        }, 300); // Aguarda o fim da animação
-      }
-    }
+    if (addresses === null) return;
+
+    const filteredAddresses = addresses.filter(
+      (endereco) => endereco.id !== id
+    );
+
+    setAddresses(filteredAddresses);
   }
 
   return (
@@ -167,7 +116,7 @@ export default function Home() {
             <td>{address.cep || "xxx"}</td>
             <td>{formatDate(address.consultedAt)}</td>
             <td>
-              <button className="bg-red-600 p-0.5 flex justify-items-center"><MdOutlineDelete size={24}/></button>
+              <button className="bg-red-600 p-0.5 flex justify-items-center" onClick={() => handleRemoveAddress(address.id)}><MdOutlineDelete size={24}/></button>
             </td>
           </tr>
         ))}

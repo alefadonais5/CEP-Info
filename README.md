@@ -56,7 +56,7 @@ Este é um projeto desenvolvido em **Next.js** para consultar endereços com bas
    ```
 
 4. **Acesse a aplicação:**
-   - Abra o navegador e vá para: [http://localhost:3000](http://localhost:3000).
+   - Abra o navegador e vá para: [Clique Aqui](https://cep-info-apwkoyjts-alefs-projects-9b27b72c.vercel.app).
 
 ---
 
@@ -82,7 +82,8 @@ Este é um projeto desenvolvido em **Next.js** para consultar endereços com bas
 ## 🖼️ Design
 
 ### Tela principal
-![Exemplo da tela principal](https://via.placeholder.com/800x400?text=Adicionar+uma+imagem)
+![Tela principal](https://github.com/user-attachments/assets/2257677e-2cd7-4fb4-b478-e7f4a25fee7f)
+
 
 ---
 
